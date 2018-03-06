@@ -16,14 +16,14 @@
     "async": "^2.6.0",
     "bower": "^1.8.2",
     "db-migrate": "^0.10.5",
+    "db-migrate-sqlite3": "^0.2.1",
     "mysql": "^2.15.0",
     "node-dbi": "^0.7.1",
-    "percolator": "^1.5.0",
-    "sqlite3": "^3.1.13"
+    "percolator": "^1.5.0"
   },
   "devDependencies": {
     "jasmine-node": "^1.14.5",
-    "request": "^2.83.0",
+    "request": "",
     "sqlite3": ""
   }
 }

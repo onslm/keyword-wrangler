@@ -4,7 +4,8 @@ var dbSession = require('../../src/backend/dbSession.js');
 var Server = function(port) {
     var server = Percolator({
       'port': port,
-      'autoLink': false
+      'autoLink': false,
+      'staticDir': __dirname + '/../frontend/'
     });
     server.route('/api/keywords', {
           GET: function(req, res) {
@@ -20,6 +21,24 @@ var Server = function(port) {
           }
         }
       )
+
+    server.route('/api/keywords/categories', {
+          GET: function(req, res) {
+            dbSession.fetchAll('SELECT id, name FROM categories ORDER by id',
+            function(err, rows) {
+              if (err) {
+                console.log(err)
+                res.status.internalServerError(err)
+              } else {
+                console.log('sending row from catgory db ' + rows)
+                res.collection(rows).send()
+              }
+            })
+          }
+        }
+      )
+
+
   return server
 }
 

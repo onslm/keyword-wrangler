@@ -1,3 +1,8 @@
+/*
+./node_modules/.bin/db-migrate up --env test && \
+./node_modules/.bin/jasmine-node --verbose --captureExceptions ./spec/
+*/
+
 'use strict'
 var request = require('request')
 var dbSession = require('../../src/backend/dbSession.js')
@@ -87,4 +92,54 @@ describe('The api', function() {
     )
   })
 
+  it('should respond to GET request at /api/categories', function(done) {
+    var expected = {
+      "__items": [
+        {'id': 1, 'name': 'Vegetable'},
+        {'id': 2, 'name': 'Uchyl'}
+      ]
+    }
+
+    async.series(
+      [
+        function(callback) {
+          resetDatabase(dbSession, callback)
+        },
+
+        function(callback) {
+          dbSession.insert(
+            'category',
+            {'name': 'Vegetable'},
+            function(err) { callback(err) }
+          )
+        },
+
+        function(callback) {
+          dbSession.insert(
+            'category',
+            {'name': 'Uchyl'},
+            function(err) { callback(err) }
+          )
+        }
+
+      ],
+
+      function(err, results) {
+        if (err) throw(err)
+        request({
+          'method': 'GET',
+          'uri': 'http://localhost:8081/api/keywords/categories/',
+          'json': true
+        },
+          function(err, res, body) {
+            expect(res.statusCode).toBe(200)
+            expect(body).toEqual(expected)
+            done()
+          }
+        )
+      }
+
+    )
+
+  })
 })
