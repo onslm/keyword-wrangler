@@ -1,14 +1,31 @@
 
-'use strict'
+'use strict';
 
+var env = require('./env')
+var dbOptions = require('../../database.json')[env]
 var DBWrapper = require('node-dbi').DBWrapper;
 
-var dbConnectionConfig = {'path': '/var/tmp/kw-wrangler.test.sqlite'}
+// var dbConnectionConfig = {'path': '/var/tmp/kw-wrangler.test.sqlite'}
 
-var dbWrapper = new DBWrapper('sqlite3', dbConnectionConfig)
+// var dbWrapper = new DBWrapper('sqlite3', dbConnectionConfig)
+
+var dbWrapper
+
+if (dbOptions.driver === 'sqlite3') {
+  var dbWrapper = new DBWrapper('sqlite3', { 'path': dbOptions.filename })
+} else if (dbOptions.driver === 'mysql') {
+  dbWrapper = new DBWrapper('mysql', {
+    'host': dbOptions.host,
+    'user': dbOptions.user,
+    'password': dbOptions.password,
+    'database': dbOptions.database
+  })
+} else {
+  throw(new Error('No suitable db config found.'))
+}
+
 
 dbWrapper.connect()
-
 module.exports = dbWrapper
 
 /*

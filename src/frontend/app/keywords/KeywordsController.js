@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 (function() {
   var app = angular.module('app')
@@ -101,11 +101,11 @@ ndtrack. */
     // Jsem nepochopil..? These are here to make the grid behave cleanly in regards to the keyword category select
     $scope.stopEditingKeywordCategory = function() {
       $scope.$broadcast('ngGridEventEndCellEdit')
-    }
+    };
 
     $scope.$on('ngGridEventRows', function(newRows) {
       $scope.$broadcast('ngGridEventEndCellEdit')
-    })
+    });
 
   })
-})()
+})();
